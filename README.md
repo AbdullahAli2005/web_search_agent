@@ -20,6 +20,7 @@ web_search_agent/
 │── .env                  # Stores API keys
 │── requirements.txt      # Python dependencies
 │── web_agent.py          # Main agent script
+│── app.py                # Streamlit UI
 │── README.md             # Project documentation
 ```
 
