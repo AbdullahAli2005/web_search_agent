@@ -1,7 +1,6 @@
+dotenv
+langchain_google_genai
+langchain_tavily
+langgraph
+langchain_core
 streamlit
-langchain
-langchain-community
-langchain-openai
-langchain-tavily
-langchain-google-genai
-python-dotenv
