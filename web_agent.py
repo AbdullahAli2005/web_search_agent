@@ -1,4 +1,5 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_tavily import TavilySearch
@@ -18,8 +19,11 @@ agent = create_react_agent(
 
 def run_query(query: str):
     """Run a query through LangGraph agent"""
-    result = agent.invoke({"messages": [("user", query)]})
-    return result["messages"][-1].content
+    try:
+        result = asyncio.run(agent.ainvoke({"messages": [("user", query)]}))
+        return result["messages"][-1].content
+    except Exception as e:
+        return f"❌ Error: {e}"
 
 if __name__ == "__main__":
     query = "Latest breakthroughs in AI 2025"
