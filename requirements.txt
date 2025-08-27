@@ -4,3 +4,4 @@ langchain_tavily
 langgraph
 langchain_core
 streamlit
+nest_asyncio
