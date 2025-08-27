@@ -1,6 +1,4 @@
-import nest_asyncio
-nest_asyncio.apply()
-
+# app.py
 import streamlit as st
 from web_agent import run_query
 
@@ -19,3 +17,5 @@ if st.button("Search"):
             st.write(result)
         except Exception as e:
             st.error(f"❌ Error: {e}")
+    else:
+        st.warning("⚠️ Please enter a query first.")
