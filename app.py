@@ -1,5 +1,7 @@
+# app.py
 import streamlit as st
-from web_agent import run_query
+import asyncio
+from web_agent import run_query_async
 
 st.set_page_config(page_title="AI Web Search Agent", page_icon="🌐")
 
@@ -11,7 +13,8 @@ if st.button("Search"):
     if query.strip():
         try:
             with st.spinner("🔍 Searching..."):
-                result = run_query(query)
+                # Direct async run
+                result = asyncio.run(run_query_async(query))
             st.success("✅ Done!")
             st.write(result)
         except Exception as e:
