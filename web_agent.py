@@ -1,5 +1,4 @@
 # web_agent.py
-import os
 import asyncio
 import nest_asyncio
 from dotenv import load_dotenv
@@ -7,7 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_tavily import TavilySearch
 from langgraph.prebuilt import create_react_agent
 
-# Fix for Streamlit event loop
+# Fix for nested loops (important for Streamlit Cloud)
 nest_asyncio.apply()
 
 load_dotenv()
@@ -20,21 +19,18 @@ agent = create_react_agent(
     tools=[search_tool],
 )
 
+async def _run_query_async(query: str):
+    """Async version of run_query"""
+    result = await agent.ainvoke({"messages": [("user", query)]})
+    return result["messages"][-1].content
+
 def run_query(query: str):
-    """Run a query through LangGraph agent, works in Streamlit or CLI."""
-    async def _run():
-        result = await agent.ainvoke({"messages": [("user", query)]})
-        return result["messages"][-1].content
-
+    """Safe sync wrapper for both local & Streamlit"""
     try:
-        return asyncio.run(_run())  # Safe for normal runs
+        loop = asyncio.get_running_loop()
     except RuntimeError:
-        # If we're already inside a running loop (Streamlit case)
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(_run())
-
-
-if __name__ == "__main__":
-    query = "Latest breakthroughs in AI 2025"
-    print("🔎 Query:", query)
-    print("📄 Answer:", run_query(query))
+        # No loop → safe for CLI
+        return asyncio.run(_run_query_async(query))
+    else:
+        # Already inside Streamlit loop
+        return loop.run_until_complete(_run_query_async(query))
