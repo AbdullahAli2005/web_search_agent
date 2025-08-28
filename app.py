@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 from web_agent import run_query
 

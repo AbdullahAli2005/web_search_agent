@@ -1,4 +1,3 @@
-# web_agent.py
 import asyncio
 import nest_asyncio
 from dotenv import load_dotenv
@@ -6,7 +5,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_tavily import TavilySearch
 from langgraph.prebuilt import create_react_agent
 
-# Fix for nested loops (important for Streamlit Cloud)
 nest_asyncio.apply()
 
 load_dotenv()
@@ -29,8 +27,14 @@ def run_query(query: str):
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
-        # No loop → safe for CLI
+        # No running loop → safe for CLI
         return asyncio.run(_run_query_async(query))
     else:
-        # Already inside Streamlit loop
+        # Already inside Streamlit loop → reuse it
         return loop.run_until_complete(_run_query_async(query))
+
+
+if __name__ == "__main__":
+    query = "Latest breakthroughs in AI 2025"
+    print("🔎 Query:", query)
+    print("📄 Answer:", run_query(query))
