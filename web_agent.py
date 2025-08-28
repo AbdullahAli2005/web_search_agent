@@ -1,4 +1,3 @@
-# web_agent.py
 import asyncio
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI

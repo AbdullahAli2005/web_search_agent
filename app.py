@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import asyncio
 from web_agent import run_query_async
